@@ -25,61 +25,21 @@ else
         DIALOG="xdialog"
     fi
 
-    if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-    then
-##надпись вверху окна программы
-##name top window
-OPTS=" --backtitle Установка системы --clear"
-fi
-OPTS=" --backtitle Install_system --clear"
+##путь путь до текстовых файлов и переводов
+pathtranslatefile=/home/ztime/calcinst
 
-##файл предупреждения
-##file warning
+##определяем язык системы и подставляем текстовый файл
 if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 then
-$DIALOG $OPTS --msgbox "Приступаем к устаноке системы!\n\n
-Обращаем Ваше внимание что данный установщик создан для облегчения\n
-процесса установки. Особенность его такова, что большинство\n
-параметров для упрощения процесса не задействованны.\n\n
-Если Вы в первый раз устанавливаете систему на чистый жесткий диск,\n
-то выбирайте пункт следующего меню номер '1' 'Автоматическая установка'\n\n
-'1' 'Автоматическая установка'\n
-Минимум вопросов - установка происходит в автоматическом режиме\n
-почти без Вашего участия! Нужно будет только ввести:\т
-* имя компьютера и домен сети\n
-* выбрать разрешение экрана
-ВНИМАНИЕ - ЖЕСТКИЙ ДИСК В СИСТЕМЕ\n
-БУДЕТ ПЕРЕРАЗБИТ И ОТФОРМАТИРОВАН В АВТОМАТИЧЕСКОМ РЕЖИМЕ\n
-         ОСОБЕННО С MS WINDOWS :))!!!\n\n
-ЕСЛИ ВЫ ЭТОГО НЕ ЖЕЛАЕТЕ \nТО ВАМ НУЖНО ВОСПОЛЬЗОВАТЬСЯ ПУНКТОМ '2' 'Разметить диск'\n\n
-Отличия нижеследующих пунктов от пункта один указаны значком *\n
-'2' 'Разметить диск'\n
-    * Разметка диска вручную\n
-'3' 'Без разбиения'\n
-    * \n
-'4' 'Ручное разбиение и опция --build при установке'" 60 80
-#надо перевести меню на английский
+translatefile=$pathtranslatefile/ru.txt
 else
-$DIALOG $OPTS --msgbox "Getting Started install system!\n\n
-Please read this post until the end and very carefully!\n\n
-Please note that this installer designed to help\n
-installation process. The peculiarity of it is that most\n
-parameters to simplify the process of engagement is not.\n\n
-If this your first time installing on a clean hard drive,\n
-then select the next menu item number '1 '' With a nutshell disk '\n\n
-'1' 'With a nutshell disk '\n
-He asks a minimum of questions and do almost everything automatically\n
-without your participation! \n YOUR HARD DRIVE SYSTEM\n
-WILL repartition and reformatting, and especially with MS WINDOWS :))!!!\n\n
-IF you do not wish \nyou need to use the Commando '2' 'Manual partitioning '\n\n
-If you are an experienced user of the system, then choose the item\n\n\
-'2' 'Manual partitioning'\n\n
-OR\n\n
-'3' 'No split'\n\n
-OR\n\n
-'4' 'Manual partition option and - build to install'" 60 80
+translatefile=$pathtranslatefile/en.txt
 fi
+source $translatefile
 
+##меню предупреждения
+##warning menu
+$DIALOG $OPTS --msgbox "$text1" 60 80
 
 ###Выясняем диски в системе
 ###We find out drives in the system
@@ -141,12 +101,7 @@ devinput3="`cat /tmp/devinputtemp3`"
 
 ##первичное меню
 ##primary menu
-if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-then
-$DIALOG $OPTS --title "Выбор установки" --menu "Установка системы" 40 60 4  "1" "С авторазбиением диска" "2" "Ручное разбиение" "3" "Без разбиения" "4" "Ручное разбиение и опция --build при установке" 2>/tmp/instalmenu.$$
-else
-$DIALOG $OPTS --title "Choose Setup" --menu "Installation" 40 60 4 "1" "With a nutshell disk" "2" "Manual partitioning" "3" "No partition" "4" " Manual partitioning and option --build installation" 2>/tmp/instalmenu.$$
-fi
+$DIALOG $OPTS --title "$text2" --menu "$text3" 40 60 4 "1" "$text4" "2" "$text5" "3" "$text6" "4" "$text7" 2>/tmp/instalmenu.$$
 
 if [ $? = 1 ]; then
 #удаляем файл пункта меню
@@ -164,31 +119,16 @@ R="`cat /tmp/instalmenu.$$`"
 ##################################Paragraph 1 of the main menu
 if [ $R = "1" ]; then
 
-
 #меню
 #menu
 	#сообщение о дисках в системе
 	#message about disks in the system
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-	then
-        $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе" --textbox /tmp/devinput 100 100
-	$DIALOG $OPTS --yesno "ВНИМАНИЕ\n\n
-        ВСЕ РАЗДЕЛЫ ВЫБРАННОГО ВАМИ ДАЛЕЕ ЖЕСТКОГО ДИСКА\nБУДУТ УНИЧТОЖЕНЫ!!!\n\n
-        Будут созданы 3 раздела\n\n/dev/sd*1 - swap раздел (расчитывается автоматически\nпо формуле - объем вашей оперативной памяти умноженный на 2\n\n/dev/sd*2 - /root раздел размером 30G\n\n/dev/sd*3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nВы точно хотите приступить к автоформатированию диска?" 40 60
-	else
-	$DIALOG $OPTS --yesno "WARNING\n\n
-        ALL SECTIONS OF YOUR NEXT HARD DISK\nBUDUT LOST!!!\n\n
-        This will create three partitions\n\n /dev/sd*1 - swap partition (calculated automatically\nformula - the amount of your RAM multiplied by 2\n\n /dev/sd*2 - /root partition, 30G\n\n/dev/sd*3 - the rest of the volume of the disk\nTo the folder /home or install a different version of the system\n\nYou just want to start auto-formatting the disk?" 40 60
-        $DIALOG $OPTS --title "Hard drives installed in your system" --textbox /tmp/devinput 100 100
-	fi
+        $DIALOG $OPTS --title "$text8" --textbox /tmp/devinput 100 100
+	$DIALOG $OPTS --yesno "$text9" 40 60
         if [ $? = "0" ]
         then
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-	then
-        $DIALOG $OPTS --title "Выбор диска для форматирования" --menu "Введите диск для разбиения. \n У вас установленны диски\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
-        else
-	$DIALOG $OPTS --title "Select disk to be formatted" --menu "Enter the drive to partition. \n You have installed disks\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2> /tmp/devformat.$$
-	fi
+        $DIALOG $OPTS --title "$text10" --menu "$text11$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
+
 
 ##указываем диск для форматирования например /dev/sda
 ##specify the disk to be formatted like /dev/sda
@@ -246,14 +186,7 @@ echo -e $nadomestanadiske > /tmp/nadomestanadiske.$$
         devformat1="`cat /tmp/devformat.$$`1"
         devformat2="`cat /tmp/devformat.$$`2"
         devformat3="`cat /tmp/devformat.$$`3"
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-        $DIALOG $OPTS --yesno "Приступаем - все разделы диска $devformat будут уничтожены!!\n\n
-        Будут созданы три раздела\n\n$devformat1 - swap раздел $swapsizetmp Гигабайт\n\n$devformat2 - /root раздел размером 30 Гигабайт\n\n$devformat3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nСистема будет установлена на 2 диск\n\nВы обсолютно уверены что хотите форматировать этот диск? " 40 60
-        else
-	$DIALOG $OPTS --yesno "Getting Started - all partitions $devformat will be destroyed!!\n\n
-        This will create three partitions\n\n$devformat1 - swap section $swapsizetmp GB\n\n$devformat2 - /root partition size of 30 GB\n\n$devformat3 - the rest of the volume of disk\nTo folder /home or install a different version of the system\n\nSystem will be installed on 2 disk\n\nYou obsolytly sure you want to format this drive?" 40 60
-	fi
+        $DIALOG $OPTS --yesno "$text12$devformat$text12a$devformat1$text12b$swapsizetmp$text12c$devformat2$text12d$devformat2text12e" 40 60
 	if [ $? = "0" ]
         then
 
@@ -338,24 +271,13 @@ mkfs.$fssd2 $devsd2
 devsd3="`cat /tmp/devformat.$$`3"
 mkfs.$fssd3 $devsd3
 
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-	$DIALOG $OPTS --title "Ввод имени компьютера" --inputbox "Введите имя компьютера.\nНапример calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
-	$DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена.\nНапример home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
-	$DIALOG $OPTS --title "Выбор разрешения экрана" --menu "Введите желаемое разрешение экрана \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-#	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
-        $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
-
-    Установить?" 15 60
-
-        else
-	$DIALOG $OPTS --title "Enter the computer name" --inputbox "Enter the computer name.\ncalculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
-	$DIALOG $OPTS --title "Enter the domain name" --inputbox "Enter the domain name.\nhome (default)" 30 60 "home" 2>/tmp/domain.$$
-	$DIALOG $OPTS --title "Select the screen resolution" --menu "Enter the desired screen resolution\n (a transition with the aid of arrows\n selection with the aid of the keys 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-#	$DIALOG $OPTS --title "Select the installation boot" --menu "Save bootloader in mbr\n yes or no \n (a transition with the aid of arrows \n selection with the aid of the keys 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
-	$DIALOG $OPTS --yesno "We will perform installation of the hard disk.
-    Install?" 15 60
-	fi
+#        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
+#        then
+	$DIALOG $OPTS --title "$hostnametext1" --inputbox "$hostnametext2" 30 60 "calculate" 2>/tmp/hostn.$$
+	$DIALOG $OPTS --title "$domainnametext1" --inputbox "$domainnametext2" 30 60 "home" 2>/tmp/domain.$$
+	$DIALOG $OPTS --title "$resolutiontext1" --menu "$resolutiontext2" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
+#	$DIALOG $OPTS --title "$mbrtext1" --menu "$mbrtext2" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
+        $DIALOG $OPTS --yesno "$text13" 15 60
 
        if [ $? = "0" ]
         then
@@ -377,22 +299,14 @@ mbr="`cat /tmp/mbr.$$`"
 
 ##Выполняем установку
 ##Perform the installation system
-#old /usr/bin/calculate --disk=$devinst --set-hostname=$hostn --set-domain=$domain --set-video_resolution=$resolution --set-mbr=$mbr
 ### параметр -f отключает вопросы установщика во время установки
 ### параметр -w указывает swap диск
 ### -f option disables the questions the installer during installation
 /usr/bin/cl-install -f -d $devinst -w $devswap --hostname $hostn,$domain --X $resolution
 
 
-   if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-   then
-   $DIALOG $OPTS --msgbox "Система установлена - теперь необходима перезагрузка." 10 60
-    $DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
-   else
-   $DIALOG $OPTS --msgbox "The system is installed - it now requires a restart." 10 60
-    $DIALOG $OPTS --yesno "Reboot the computer?" 15 60
-    fi
-
+   $DIALOG $OPTS --msgbox "$text14" 10 60
+    $DIALOG $OPTS --yesno "$reboottext" 15 60
      if [ $? = "0" ]
         then
         reboot
@@ -406,12 +320,7 @@ mbr="`cat /tmp/mbr.$$`"
 	#recalculate the size in gigabyte
 	let "infonadevformat="$nadomestanadiske"/1000/1000/1000"
         let "infonadevformat1="$sizedisk"/1000/1000/1000"
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-        $DIALOG $OPTS --msgbox "Нет диска или нет места на диске $devformat.\n\nВаш диск имеет размер $infonadevformat1 Gb\n\nДиск меньше $infonadevformat Gb\n\nПожалуйста попробуйте другой диск или воспользуйтесь пунктом '2' 'Ручное разбиение'" 20 60
-        else
-	$DIALOG $OPTS --msgbox "There is no disk or no disk space $devformat.\n\nYou disk has a size of $infonadevformat1 Gb \n\nDisk less than $infonadevformat Gb\n\nPlease try another disk or use the item '2' 'Manual partitioning'" 20 60
-	fi
+        $DIALOG $OPTS --msgbox "$text15$devformat$text15a$infonadevformat1$text15b$infonadevformat$text15c" 20 60
      fi
     fi
    F="`cat /tmp/instalmenu.$$`"
@@ -421,26 +330,16 @@ mbr="`cat /tmp/mbr.$$`"
 elif [ $R = "2" ]; then
 
 #ls /dev | grep sd > /tmp/devinput.$$
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-        $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе." --textbox /tmp/devinput 30 70
-	$DIALOG $OPTS --title "Выбор диска для форматирования" --menu "Введите диск для разбиения. \n У вас установленны диски\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
-        $DIALOG $OPTS --title "Ввод размера раздела подкачки." --inputbox "Введите размер swap раздела.\nНапример по умолчанию в гигабайтах +10G\nили мегабайтах +10000M\nили килобайтах +10000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+10G" 2>/tmp/swapsize.$$
-        $DIALOG $OPTS --title "Ввод размера первого раздела." --inputbox "Введите размер первого раздела.\nНапример по умолчанию в гигабайтах +30G\nили мегабайтах +30000M\nили килобайтах +30000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+30G" 2>/tmp/sd2size.$$
-        $DIALOG $OPTS --title "Ввод размера второго раздела." --inputbox "Введите размер второго раздела. \n Например по умолчанию пустая строка. \n Если строка пустая то второй раздел займет \n всю оставшуюся часть диска - рекомендуется\n(буква G,M,K и знак + обязательны)" 30 60 "$1" 2>/tmp/sd3size.$$
-        $DIALOG $OPTS --title "Файловая система первого диска" --menu "Файловая система первого диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
-	$DIALOG $OPTS --title "Файловая система второго диска" --menu "Файловая система второго диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
-	$DIALOG $OPTS --title "Выбор раздела для установки" --inputbox "Введите раздел диска для установки. \n Например 2 по умолчанию, для /dev/sda2 или /dev/sdb2 и тп.\n или 3 для /dev/sda3 или /dev/sdb3 и тп." 30 60 "2" 2>/tmp/devinstall.$$
-	else
-	$DIALOG $OPTS --title "Hard drives installed in your system." --textbox /tmp/devinput 30 70
-	$DIALOG $OPTS --title "Select the disk to be formatted" --menu "Enter the drive to partition. \n Have you installed drive\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$	
-	$DIALOG $OPTS --title "Enter amount of swap space." --inputbox "Enter the size of swap partition.\nFor example by default in GB +10G\nor megabytes +10000M\nor kilobytes +10000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+10G" 2>/tmp/swapsize.$$
-	$DIALOG $OPTS --title "Enter the size of the first section." --inputbox "Enter the size of the first section.\nFor example by default in GB +30G\nor megabytes +30000M\nor kilobytes +30000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+30G" 2>/tmp/sd2size.$$
-	$DIALOG $OPTS --title "Enter the size of the second section." --inputbox "Enter the size of the second section. \n For example the default empty string. \n If the string is empty then the second section \n will take the rest of the disc - recommended\n(letter G,M,K and sign + required)" 30 60 "$1" 2>/tmp/sd3size.$$
-	$DIALOG $OPTS --title "The file system of the first disk" --menu "The file system of the first disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
-	$DIALOG $OPTS --title "The file system of the second disk" --menu "The file system of the second disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
-	$DIALOG $OPTS --title "Selecting a partition to install" --inputbox "Enter the partition to install. \n For example 2 by default, /dev/sda2 or /dev/sdb2 \n or 3 for /dev/sda3 or /dev/sdb3." 30 60 "2" 2>/tmp/devinstall.$$
-	fi	
+#	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
+#        then
+        $DIALOG $OPTS --title "$text8" --textbox /tmp/devinput 30 70
+	$DIALOG $OPTS --title "$text10" --menu "$text11$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
+        $DIALOG $OPTS --title "$text16" --inputbox "$text17" 30 60 "+10G" 2>/tmp/swapsize.$$
+        $DIALOG $OPTS --title "$text18" --inputbox "$text19" 30 60 "+30G" 2>/tmp/sd2size.$$
+        $DIALOG $OPTS --title "$text20" --inputbox "$text21" 30 60 "$1" 2>/tmp/sd3size.$$
+        $DIALOG $OPTS --title "$text22" --menu "$text23" 30 60 5 ext4 "ext4" ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
+	$DIALOG $OPTS --title "$text24" --menu "$text25" 30 60 5 ext4 "ext4" ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
+	$DIALOG $OPTS --title "$text26" --inputbox "$text27" 30 60 "2" 2>/tmp/devinstall.$$
 
 devformat="`cat /tmp/devformat.$$`"
 devformat1="`cat /tmp/devformat.$$`1"
