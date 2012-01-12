@@ -38,23 +38,27 @@ OPTS=" --backtitle Install_system --clear"
 if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 then
 $DIALOG $OPTS --msgbox "Приступаем к устаноке системы!\n\n
-Пожалуйста прочитайте это сообщение до конца и очень внимательно!\n\n
 Обращаем Ваше внимание что данный установщик создан для облегчения\n
 процесса установки. Особенность его такова, что большинство\n
 параметров для упрощения процесса не задействованны.\n\n
 Если Вы в первый раз устанавливаете систему на чистый жесткий диск,\n
-то выбирайте пункт следующего меню номер '1' 'С авторазбиением диска'\n\n
-'1' 'С авторазбиением диска'\n
-Он задаст минимум вопросов и сделает почти все автоматически\n
-без Вашего участия!\n ВЫБРАННЫЙ ВАМИ ЖЕСТКИЙ ДИСК В СИСТЕМЕ\n
-БУДЕТ ПЕРЕРАЗБИТ И ПЕРЕФОРМАТИРОВАНН И ОСОБЕННО С MS WINDOWS :))!!!\n\n
-ЕСЛИ ВЫ ЭТОГО НЕ ЖЕЛАЕТЕ \nТО ВАМ НУЖНО ВОСПОЛЬЗОВАТЬСЯ КОММАНДОЙ '2' 'Ручное разбиение'\n\n
-Если Вы опытный пользователь системы, то выбирайте пункт\n\n\
-'2' 'Ручное разбиение'\n\n
-ИЛИ\n\n
-'3' 'Без разбиения'\n\n
-ИЛИ\n\n
+то выбирайте пункт следующего меню номер '1' 'Автоматическая установка'\n\n
+'1' 'Автоматическая установка'\n
+Минимум вопросов - установка происходит в автоматическом режиме\n
+почти без Вашего участия! Нужно будет только ввести:\т
+* имя компьютера и домен сети\n
+* выбрать разрешение экрана
+ВНИМАНИЕ - ЖЕСТКИЙ ДИСК В СИСТЕМЕ\n
+БУДЕТ ПЕРЕРАЗБИТ И ОТФОРМАТИРОВАН В АВТОМАТИЧЕСКОМ РЕЖИМЕ\n
+         ОСОБЕННО С MS WINDOWS :))!!!\n\n
+ЕСЛИ ВЫ ЭТОГО НЕ ЖЕЛАЕТЕ \nТО ВАМ НУЖНО ВОСПОЛЬЗОВАТЬСЯ ПУНКТОМ '2' 'Разметить диск'\n\n
+Отличия нижеследующих пунктов от пункта один указаны значком *\n
+'2' 'Разметить диск'\n
+    * Разметка диска вручную\n
+'3' 'Без разбиения'\n
+    * \n
 '4' 'Ручное разбиение и опция --build при установке'" 60 80
+#надо перевести меню на английский
 else
 $DIALOG $OPTS --msgbox "Getting Started install system!\n\n
 Please read this post until the end and very carefully!\n\n
@@ -170,11 +174,11 @@ if [ $R = "1" ]; then
         $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе" --textbox /tmp/devinput 100 100
 	$DIALOG $OPTS --yesno "ВНИМАНИЕ\n\n
         ВСЕ РАЗДЕЛЫ ВЫБРАННОГО ВАМИ ДАЛЕЕ ЖЕСТКОГО ДИСКА\nБУДУТ УНИЧТОЖЕНЫ!!!\n\n
-        Будут созданы 3 раздела\n\n/dev/sd*1 - swap раздел (расчитывается автоматически\nпо формуле - объем вашей оперативной памяти умноженный на 2\n\n/dev/sd*2 - /root раздел размером 10G\n\n/dev/sd*3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nВы точно хотите приступить к автоформатированию диска?" 40 60
+        Будут созданы 3 раздела\n\n/dev/sd*1 - swap раздел (расчитывается автоматически\nпо формуле - объем вашей оперативной памяти умноженный на 2\n\n/dev/sd*2 - /root раздел размером 30G\n\n/dev/sd*3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nВы точно хотите приступить к автоформатированию диска?" 40 60
 	else
 	$DIALOG $OPTS --yesno "WARNING\n\n
         ALL SECTIONS OF YOUR NEXT HARD DISK\nBUDUT LOST!!!\n\n
-        This will create three partitions\n\n /dev/sd*1 - swap partition (calculated automatically\nformula - the amount of your RAM multiplied by 2\n\n /dev/sd*2 - /root partition, 10G\n\n/dev/sd*3 - the rest of the volume of the disk\nTo the folder /home or install a different version of the system\n\nYou just want to start auto-formatting the disk?" 40 60
+        This will create three partitions\n\n /dev/sd*1 - swap partition (calculated automatically\nformula - the amount of your RAM multiplied by 2\n\n /dev/sd*2 - /root partition, 30G\n\n/dev/sd*3 - the rest of the volume of the disk\nTo the folder /home or install a different version of the system\n\nYou just want to start auto-formatting the disk?" 40 60
         $DIALOG $OPTS --title "Hard drives installed in your system" --textbox /tmp/devinput 100 100
 	fi
         if [ $? = "0" ]
@@ -227,7 +231,7 @@ swapsize="`cat /tmp/swapsizetmp.$$`"
 
 ##указываем размер /root раздела в байтах
 ##specify size of /root partition in bytes
-rootsize="10752000000"
+rootsize="32256000000"
 echo -e $rootsize > /tmp/rootsize.$$
 
 ##расчитываем размер неоходимого места на диске в байтах (больше или равно)
@@ -245,10 +249,10 @@ echo -e $nadomestanadiske > /tmp/nadomestanadiske.$$
         if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
         then
         $DIALOG $OPTS --yesno "Приступаем - все разделы диска $devformat будут уничтожены!!\n\n
-        Будут созданы три раздела\n\n$devformat1 - swap раздел 10 Гигабайт\n\n$devformat2 - /root раздел размером 30 Гигабайт\n\n$devformat3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nСистема будет установлена на 2 диск\n\nВы обсолютно уверены что хотите форматировать этот диск? " 40 60
+        Будут созданы три раздела\n\n$devformat1 - swap раздел $swapsizetmp Гигабайт\n\n$devformat2 - /root раздел размером 30 Гигабайт\n\n$devformat3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nСистема будет установлена на 2 диск\n\nВы обсолютно уверены что хотите форматировать этот диск? " 40 60
         else
 	$DIALOG $OPTS --yesno "Getting Started - all partitions $devformat will be destroyed!!\n\n
-        This will create three partitions\n\n$devformat1 - swap section 10 GB\n\n$devformat2 - /root partition size of 30 GB\n\n$devformat3 - the rest of the volume of disk\nTo folder /home or install a different version of the system\n\nSystem will be installed on 2 disk\n\nYou obsolytly sure you want to format this drive?" 40 60
+        This will create three partitions\n\n$devformat1 - swap section $swapsizetmp GB\n\n$devformat2 - /root partition size of 30 GB\n\n$devformat3 - the rest of the volume of disk\nTo folder /home or install a different version of the system\n\nSystem will be installed on 2 disk\n\nYou obsolytly sure you want to format this drive?" 40 60
 	fi
 	if [ $? = "0" ]
         then
@@ -339,7 +343,7 @@ mkfs.$fssd3 $devsd3
 	$DIALOG $OPTS --title "Ввод имени компьютера" --inputbox "Введите имя компьютера.\nНапример calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
 	$DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена.\nНапример home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
 	$DIALOG $OPTS --title "Выбор разрешения экрана" --menu "Введите желаемое разрешение экрана \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
+#	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
         $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
 
     Установить?" 15 60
@@ -348,7 +352,7 @@ mkfs.$fssd3 $devsd3
 	$DIALOG $OPTS --title "Enter the computer name" --inputbox "Enter the computer name.\ncalculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
 	$DIALOG $OPTS --title "Enter the domain name" --inputbox "Enter the domain name.\nhome (default)" 30 60 "home" 2>/tmp/domain.$$
 	$DIALOG $OPTS --title "Select the screen resolution" --menu "Enter the desired screen resolution\n (a transition with the aid of arrows\n selection with the aid of the keys 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-	$DIALOG $OPTS --title "Select the installation boot" --menu "Save bootloader in mbr\n yes or no \n (a transition with the aid of arrows \n selection with the aid of the keys 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
+#	$DIALOG $OPTS --title "Select the installation boot" --menu "Save bootloader in mbr\n yes or no \n (a transition with the aid of arrows \n selection with the aid of the keys 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
 	$DIALOG $OPTS --yesno "We will perform installation of the hard disk.
     Install?" 15 60
 	fi
@@ -375,8 +379,9 @@ mbr="`cat /tmp/mbr.$$`"
 ##Perform the installation system
 #old /usr/bin/calculate --disk=$devinst --set-hostname=$hostn --set-domain=$domain --set-video_resolution=$resolution --set-mbr=$mbr
 ### параметр -f отключает вопросы установщика во время установки
+### параметр -w указывает swap диск
 ### -f option disables the questions the installer during installation
-/usr/bin/cl-install -f -d $devinst --hostname $hostn,$domain --X $resolution --mbr $mbr
+/usr/bin/cl-install -f -d $devinst -w $devswap --hostname $hostn,$domain --X $resolution
 
 
    if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
@@ -531,7 +536,7 @@ mbr="`cat /tmp/mbr.$$`"
 #old /usr/bin/calculate --disk=$devinst --set-hostname=$hostn --set-domain=$domain --set-video_resolution=$resolution --set-mbr=$mbr
 ### параметр -f отключает вопросы установщика во время установки
 ### -f option disables the questions the installer during installation
-/usr/bin/cl-install -f -d $devinst --hostname $hostn,$domain --X $resolution --mbr $mbr
+/usr/bin/cl-install -f -d $devinst -w $devswap --hostname $hostn,$domain --X $resolution --mbr $mbr
 
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 	then
@@ -602,7 +607,7 @@ swapon -a
 #old /usr/bin/calculate --disk=$devinst --set-hostname=$hostn --set-domain=$domain --set-video_resolution=$resolution --set-mbr=$mbr
 ### параметр -f отключает вопросы установщика во время установки
 ### -f option disables the questions the installer during installation
-/usr/bin/cl-install -f -d $devinst --hostname $hostn,$domain --X $resolution --mbr $mbr
+/usr/bin/cl-install -f -d $devinst -w $devswap --hostname $hostn,$domain --X $resolution --mbr $mbr
 	
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 	then
@@ -730,7 +735,7 @@ mbr="`cat /tmp/mbr.$$`"
 #old /usr/bin/calculate --disk=$devinst --set-hostname=$hostn --set-domain=$domain --set-video_resolution=$resolution --set-mbr=$mbr --build
 ### параметр -f отключает вопросы установщика во время установки
 ### -f option disables the questions the installer during installation
-/usr/bin/cl-install -f -d $devinst --hostname $hostn,$domain --X $resolution --mbr $mbr --build
+/usr/bin/cl-install -f -d $devinst -w $devswap --hostname $hostn,$domain --X $resolution --mbr $mbr --build
 
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 	then
