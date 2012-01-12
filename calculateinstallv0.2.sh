@@ -47,12 +47,12 @@ $DIALOG $OPTS --msgbox "Приступаем к устаноке системы!
 '1' 'С авторазбиением диска'\n
 Он задаст минимум вопросов и сделает почти все автоматически\n
 без Вашего участия!\n ВЫБРАННЫЙ ВАМИ ЖЕСТКИЙ ДИСК В СИСТЕМЕ\n
-БУДЕТ ПЕРЕРАЗБИТ И ПЕРЕФОРМАТИРОВАНН И ОСОБЕННО С MS WINDOWS :))!!!\n
-ЕСЛИ ВЫ ЭТОГО НЕ ЖЕЛАЕТЕ - ТО ВАМ НУЖНО ВОСПОЛЬЗОВАТЬСЯ КОММАНДОЙ\n'2' 'Ручное разбиение'\n\n
-Если Вы опытный пользователь системы, то выбирайте пункт\n\n
+БУДЕТ ПЕРЕРАЗБИТ И ПЕРЕФОРМАТИРОВАНН И ОСОБЕННО С MS WINDOWS :))!!!\n\n
+ЕСЛИ ВЫ ЭТОГО НЕ ЖЕЛАЕТЕ \nТО ВАМ НУЖНО ВОСПОЛЬЗОВАТЬСЯ КОММАНДОЙ '2' 'Ручное разбиение'\n\n
+Если Вы опытный пользователь системы, то выбирайте пункт\n\n\
 '2' 'Ручное разбиение'\n\n
 ИЛИ\n\n
-'3' 'Без разбиения'
+'3' 'Без разбиения'\n\n
 ИЛИ\n\n
 '4' 'Ручное разбиение и опция --build при установке'" 60 80
 else
@@ -66,12 +66,12 @@ then select the next menu item number '1 '' With a nutshell disk '\n\n
 '1' 'With a nutshell disk '\n
 He asks a minimum of questions and do almost everything automatically\n
 without your participation! \n YOUR HARD DRIVE SYSTEM\n
-WILL repartition and reformatting, and especially with MS WINDOWS :))!!!\n
-IF you do not wish - you need to use the Commando \ n'2' 'Manual partitioning '\n\n
-If you are an experienced user of the system, then choose the item\n\n
+WILL repartition and reformatting, and especially with MS WINDOWS :))!!!\n\n
+IF you do not wish \nyou need to use the Commando '2' 'Manual partitioning '\n\n
+If you are an experienced user of the system, then choose the item\n\n\
 '2' 'Manual partitioning'\n\n
 OR\n\n
-'3' 'No split'
+'3' 'No split'\n\n
 OR\n\n
 '4' 'Manual partition option and - build to install'" 60 80
 fi
@@ -168,18 +168,14 @@ if [ $R = "1" ]; then
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 	then
         $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе" --textbox /tmp/devinput 100 100
-        else
-        $DIALOG $OPTS --title "Hard drives installed in your system" --textbox /tmp/devinput 100 100
-        fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-	then
 	$DIALOG $OPTS --yesno "ВНИМАНИЕ\n\n
         ВСЕ РАЗДЕЛЫ ВЫБРАННОГО ВАМИ ДАЛЕЕ ЖЕСТКОГО ДИСКА\nБУДУТ УНИЧТОЖЕНЫ!!!\n\n
-        Будут созданы три раздела\n\n/dev/sd*1 - swap раздел (расчитывается автоматически\nпо формуле - объем вашей оперативной памяти умноженный на 2\n\n/dev/sd*2 - /root раздел размером 10G\n\n/dev/sd*3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nВы точно хотите приступить к автоформатированию диска?" 40 60
+        Будут созданы 3 раздела\n\n/dev/sd*1 - swap раздел (расчитывается автоматически\nпо формуле - объем вашей оперативной памяти умноженный на 2\n\n/dev/sd*2 - /root раздел размером 10G\n\n/dev/sd*3 - весь оставшийся объем диска\nдля папки /home или установки другой версии системы\n\nВы точно хотите приступить к автоформатированию диска?" 40 60
 	else
 	$DIALOG $OPTS --yesno "WARNING\n\n
         ALL SECTIONS OF YOUR NEXT HARD DISK\nBUDUT LOST!!!\n\n
         This will create three partitions\n\n /dev/sd*1 - swap partition (calculated automatically\nformula - the amount of your RAM multiplied by 2\n\n /dev/sd*2 - /root partition, 10G\n\n/dev/sd*3 - the rest of the volume of the disk\nTo the folder /home or install a different version of the system\n\nYou just want to start auto-formatting the disk?" 40 60
+        $DIALOG $OPTS --title "Hard drives installed in your system" --textbox /tmp/devinput 100 100
 	fi
         if [ $? = "0" ]
         then
@@ -340,34 +336,19 @@ mkfs.$fssd3 $devsd3
 
         if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
         then
-        $DIALOG $OPTS --title "Ввод имени компьютера" --inputbox "Введите имя компьютера.\nНапример calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
-        else
-	$DIALOG $OPTS --title "Enter the computer name" --inputbox "Enter the computer name.\ncalculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
-	fi
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-        $DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена.\nНапример home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
-        else
-	$DIALOG $OPTS --title "Enter the domain name" --inputbox "Enter the domain name.\nhome (default)" 30 60 "home" 2>/tmp/domain.$$
-	fi
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-	$DIALOG $OPTS --title "Выбор разрешения экрана" --menu "Выбирите желаемое разрешение экрана \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-        else
-	$DIALOG $OPTS --title "Select the screen resolution" --menu "Select the desired screen resolution\n (a transition with the aid of arrows\n selection with the aid of the keys 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
-	fi
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
+	$DIALOG $OPTS --title "Ввод имени компьютера" --inputbox "Введите имя компьютера.\nНапример calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
+	$DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена.\nНапример home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
+	$DIALOG $OPTS --title "Выбор разрешения экрана" --menu "Введите желаемое разрешение экрана \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
 	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
-        else
-	$DIALOG $OPTS --title "Select the installation boot" --menu "Save bootloader in mbr\n yes or no \n (a transition with the aid of arrows \n selection with the aid of the keys 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
-	fi
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
         $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
 
     Установить?" 15 60
+
         else
+	$DIALOG $OPTS --title "Enter the computer name" --inputbox "Enter the computer name.\ncalculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
+	$DIALOG $OPTS --title "Enter the domain name" --inputbox "Enter the domain name.\nhome (default)" 30 60 "home" 2>/tmp/domain.$$
+	$DIALOG $OPTS --title "Select the screen resolution" --menu "Enter the desired screen resolution\n (a transition with the aid of arrows\n selection with the aid of the keys 'ENTER')" 30 60 7 1680x1050 "1680x1050" 1280x1024 "1280x1024" 1440x900 "1440x900" 1152x864 "1152x864" 1024x768 "1024x768" 800x600 "800x600" 640x480 "640x480" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "Select the installation boot" --menu "Save bootloader in mbr\n yes or no \n (a transition with the aid of arrows \n selection with the aid of the keys 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
 	$DIALOG $OPTS --yesno "We will perform installation of the hard disk.
     Install?" 15 60
 	fi
@@ -401,14 +382,9 @@ mbr="`cat /tmp/mbr.$$`"
    if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
    then
    $DIALOG $OPTS --msgbox "Система установлена - теперь необходима перезагрузка." 10 60
+    $DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
    else
    $DIALOG $OPTS --msgbox "The system is installed - it now requires a restart." 10 60
-   fi
-
-    if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-    then
-    $DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
-    else
     $DIALOG $OPTS --yesno "Reboot the computer?" 15 60
     fi
 
@@ -443,51 +419,21 @@ elif [ $R = "2" ]; then
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
         then
         $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе." --textbox /tmp/devinput 30 70
-	else
-	$DIALOG $OPTS --title "Hard drives installed in your system." --textbox /tmp/devinput 30 70
-	fi
-#        $DIALOG $OPTS --title "Выбор диска для форматирования." --menu "Введите диск для разбиения. \n Например /dev/sda" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
-        if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
 	$DIALOG $OPTS --title "Выбор диска для форматирования" --menu "Введите диск для разбиения. \n У вас установленны диски\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
-	else
-	$DIALOG $OPTS --title "Select the disk to be formatted" --menu "Enter the drive to partition. \n Have you installed drive\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$	
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
         $DIALOG $OPTS --title "Ввод размера раздела подкачки." --inputbox "Введите размер swap раздела.\nНапример по умолчанию в гигабайтах +10G\nили мегабайтах +10000M\nили килобайтах +10000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+10G" 2>/tmp/swapsize.$$
-	else
-	$DIALOG $OPTS --title "Enter amount of swap space." --inputbox "Enter the size of swap partition.\nFor example by default in GB +10G\nor megabytes +10000M\nor kilobytes +10000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+10G" 2>/tmp/swapsize.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-        $DIALOG $OPTS --title "Ввод размера первого раздела." --inputbox "Введите размер первого раздела.\nНапример по умолчанию в гигабайтах +30G\nили мегабайтах +30000M\nили килобайтах +30000000K\n(обязательны к вводк буквы G или M или K и знак +)" 30 60 "+30G" 2>/tmp/sd2size.$$
-	else
-	$DIALOG $OPTS --title "Enter the size of the first section." --inputbox "Enter the size of the first section.\nFor example by default in GB +30G\nor megabytes +30000M\nor kilobytes +30000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+30G" 2>/tmp/sd2size.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
+        $DIALOG $OPTS --title "Ввод размера первого раздела." --inputbox "Введите размер первого раздела.\nНапример по умолчанию в гигабайтах +30G\nили мегабайтах +30000M\nили килобайтах +30000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+30G" 2>/tmp/sd2size.$$
         $DIALOG $OPTS --title "Ввод размера второго раздела." --inputbox "Введите размер второго раздела. \n Например по умолчанию пустая строка. \n Если строка пустая то второй раздел займет \n всю оставшуюся часть диска - рекомендуется\n(буква G,M,K и знак + обязательны)" 30 60 "$1" 2>/tmp/sd3size.$$
-	else
-	$DIALOG $OPTS --title "Enter the size of the second section." --inputbox "Enter the size of the second section. \n For example the default empty string. \n If the string is empty then the second section \n will take the rest of the disc
- - recommended\n(letter G,M,K and sign + required)" 30 60 "$1" 2>/tmp/sd3size.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
         $DIALOG $OPTS --title "Файловая система первого диска" --menu "Файловая система первого диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
-	else        
-	$DIALOG $OPTS --title "The file system of the first disk" --menu "The file system of the first disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
 	$DIALOG $OPTS --title "Файловая система второго диска" --menu "Файловая система второго диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
-	else
-	$DIALOG $OPTS --title "The file system of the second disk" --menu "The file system of the second disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then        
 	$DIALOG $OPTS --title "Выбор раздела для установки" --inputbox "Введите раздел диска для установки. \n Например 2 по умолчанию, для /dev/sda2 или /dev/sdb2 и тп.\n или 3 для /dev/sda3 или /dev/sdb3 и тп." 30 60 "2" 2>/tmp/devinstall.$$
 	else
+	$DIALOG $OPTS --title "Hard drives installed in your system." --textbox /tmp/devinput 30 70
+	$DIALOG $OPTS --title "Select the disk to be formatted" --menu "Enter the drive to partition. \n Have you installed drive\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$	
+	$DIALOG $OPTS --title "Enter amount of swap space." --inputbox "Enter the size of swap partition.\nFor example by default in GB +10G\nor megabytes +10000M\nor kilobytes +10000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+10G" 2>/tmp/swapsize.$$
+	$DIALOG $OPTS --title "Enter the size of the first section." --inputbox "Enter the size of the first section.\nFor example by default in GB +30G\nor megabytes +30000M\nor kilobytes +30000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+30G" 2>/tmp/sd2size.$$
+	$DIALOG $OPTS --title "Enter the size of the second section." --inputbox "Enter the size of the second section. \n For example the default empty string. \n If the string is empty then the second section \n will take the rest of the disc - recommended\n(letter G,M,K and sign + required)" 30 60 "$1" 2>/tmp/sd3size.$$
+	$DIALOG $OPTS --title "The file system of the first disk" --menu "The file system of the first disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
+	$DIALOG $OPTS --title "The file system of the second disk" --menu "The file system of the second disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
 	$DIALOG $OPTS --title "Selecting a partition to install" --inputbox "Enter the partition to install. \n For example 2 by default, /dev/sda2 or /dev/sdb2 \n or 3 for /dev/sda3 or /dev/sdb3." 30 60 "2" 2>/tmp/devinstall.$$
 	fi	
 
@@ -555,37 +501,20 @@ mkfs.$fssd3 $devsd3
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
         then
         $DIALOG $OPTS --title "Ввод имени компьютера в сети" --inputbox "Введите имя компьютера. \n Например calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
-	else
-	$DIALOG $OPTS --title "Enter the name of the computer network" --inputbox "Enter the computer name. \n For example calculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
         $DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена. \n Например home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
-	else
-	$DIALOG $OPTS --title "Enter a domain name" --inputbox "Enter a domain name. \n For example home (default)" 30 60 "home" 2>/tmp/domain.$$
-	fi
-#````````$DIALOG $OPTS --radiolist "Выбирите желаемое разрешение экрана" 20 40 3 1024x768 "1024x768" on 800x600 "800x600" off 640x480 "640x480" off 2>/tmp/resolution.$$
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
-	$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Выбирите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
-	else
-	$DIALOG $OPTS --title "The choice of screen resolution" --inputbox "Select the desired screen resolution. \n For example 1024x768 (default)" 30 60 "1024x768" 2>/tmp/resolution.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
+	$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Введите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
 	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
-	else
-	$DIALOG $OPTS --title "Selecting the boot loader" --menu "Record loader to mbr \n yes or no \n (transition with the aid of the arrows \n selection with the aid of key 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-        then
         $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
 
-    Установить?" 15 60
+        Установить?" 15 60
 	else
+	$DIALOG $OPTS --title "Enter the name of the computer network" --inputbox "Enter the computer name. \n For example calculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
+	$DIALOG $OPTS --title "Enter a domain name" --inputbox "Enter a domain name. \n For example home (default)" 30 60 "home" 2>/tmp/domain.$$
+	$DIALOG $OPTS --title "The choice of screen resolution" --inputbox "Enter the desired screen resolution. \n For example 1024x768 (default)" 30 60 "1024x768" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "Selecting the boot loader" --menu "Record loader to mbr \n yes or no \n (transition with the aid of the arrows \n selection with the aid of key 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
 	$DIALOG $OPTS --yesno "Now the system will be installed on the hard disk.
 
-    Install?" 15 60
+        Install?" 15 60
 	fi
         if [ $? = "0" ]
         then
@@ -607,13 +536,9 @@ mbr="`cat /tmp/mbr.$$`"
 	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
 	then
 	$DIALOG $OPTS --msgbox "Система установлена - теперь необходима перезагрузка." 10 60
-	else
-	$DIALOG $OPTS --msgbox "The system is installed - now a reboot." 10 60
-	fi
-	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
-	then
 	$DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
 	else
+	$DIALOG $OPTS --msgbox "The system is installed - now a reboot." 10 60
 	$DIALOG $OPTS --yesno "Reboot the computer?" 15 60
 	fi
        if [ $? = "0" ]
@@ -639,7 +564,7 @@ elif [ $R = "3" ]; then
 	$DIALOG $OPTS --title "Ввод имени компьютера в сети" --inputbox "Введите имя компьютера. \n Например calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
 	$DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена. \n Например home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
 #````````$DIALOG $OPTS --radiolist "Выбирите желаемое разрешение экрана" 20 40 3 1024x768 "1024x768" on 800x600 "800x600" off 640x480 "640x480" off 2>/tmp/resolution.$$
-	$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Выбирите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Введите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
 	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
         $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
 
@@ -651,7 +576,7 @@ elif [ $R = "3" ]; then
 	$DIALOG $OPTS --title "Enter the name of the computer network" --inputbox "Enter the computer name. \n For example calculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
 	$DIALOG $OPTS --title "Enter a domain name" --inputbox "Enter a domain name. \n For example home (default)" 30 60 "home" 2>/tmp/domain.$$
 #````````$DIALOG $OPTS --radiolist "Выбирите желаемое разрешение экрана" 20 40 3 1024x768 "1024x768" on 800x600 "800x600" off 640x480 "640x480" off 2>/tmp/resolution.$$
-	$DIALOG $OPTS --title "The choice of screen resolution" --inputbox "Select the desired screen resolution. \n For example 1024x768 (default)" 30 60 "1024x768" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "The choice of screen resolution" --inputbox "Enter the desired screen resolution. \n For example 1024x768 (default)" 30 60 "1024x768" 2>/tmp/resolution.$$
 	$DIALOG $OPTS --title "Selecting the boot loader" --menu "Record loader to mbr \n yes or no \n (transition with the aid of the arrows \n selection with the aid of key 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
         $DIALOG $OPTS --yesno "Now the system will be installed on the hard disk.
 
@@ -701,15 +626,28 @@ elif [ $R = "4" ]; then
 
 #ls /dev | grep sd > /tmp/devinput.$$
 
+	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
+        then
         $DIALOG $OPTS --title "Жесткие диски установленные в вашей системе." --textbox /tmp/devinput 30 70
-#        $DIALOG $OPTS --title "Выбор диска для форматирования." --menu "Введите диск для разбиения. \n Например /dev/sda" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
-        $DIALOG $OPTS --title "Выбор диска для форматирования" --menu "Введите диск для разбиения. \n У вас установленны диски\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
+	$DIALOG $OPTS --title "Выбор диска для форматирования" --menu "Введите диск для разбиения. \n У вас установленны диски\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$
         $DIALOG $OPTS --title "Ввод размера раздела подкачки." --inputbox "Введите размер swap раздела.\nНапример по умолчанию в гигабайтах +10G\nили мегабайтах +10000M\nили килобайтах +10000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+10G" 2>/tmp/swapsize.$$
-        $DIALOG $OPTS --title "Ввод размера первого раздела." --inputbox "Введите размер первого раздела.\nНапример по умолчанию в гигабайтах +30G\nили мегабайтах +30000M\nили килобайтах +30000000K\n(обязательны к вводк буквы G или M или K и знак +)" 30 60 "+30G" 2>/tmp/sd2size.$$
+        $DIALOG $OPTS --title "Ввод размера первого раздела." --inputbox "Введите размер первого раздела.\nНапример по умолчанию в гигабайтах +30G\nили мегабайтах +30000M\nили килобайтах +30000000K\n(обязательны к вводу буквы G или M или K и знак +)" 30 60 "+30G" 2>/tmp/sd2size.$$
         $DIALOG $OPTS --title "Ввод размера второго раздела." --inputbox "Введите размер второго раздела. \n Например по умолчанию пустая строка. \n Если строка пустая то второй раздел займет \n всю оставшуюся часть диска - рекомендуется\n(буква G,M,K и знак + обязательны)" 30 60 "$1" 2>/tmp/sd3size.$$
         $DIALOG $OPTS --title "Файловая система первого диска" --menu "Файловая система первого диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
-        $DIALOG $OPTS --title "Файловая система второго диска" --menu "Файловая система второго диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
-        $DIALOG $OPTS --title "Выбор раздела для установки" --inputbox "Введите раздел диска для установки. \n Например 2 по умолчанию, для /dev/sda2 или /dev/sdb2 и тп.\n или 3 для /dev/sda3 или /dev/sdb3 и тп." 30 60 "2" 2>/tmp/devinstall.$$
+	$DIALOG $OPTS --title "Файловая система второго диска" --menu "Файловая система второго диска. \n Например по умолчаню ext3 (по умолчанию, рекомендуется)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
+	$DIALOG $OPTS --title "Выбор раздела для установки" --inputbox "Введите раздел диска для установки. \n Например 2 по умолчанию, для /dev/sda2 или /dev/sdb2 и тп.\n или 3 для /dev/sda3 или /dev/sdb3 и тп." 30 60 "2" 2>/tmp/devinstall.$$
+	else
+	$DIALOG $OPTS --title "Hard drives installed in your system." --textbox /tmp/devinput 30 70
+	$DIALOG $OPTS --title "Select the disk to be formatted" --menu "Enter the drive to partition. \n Have you installed drive\n\n$devinputopis0\n\n$devinputopis1\n\n$devinputopis2\n\n$devinputopis3\n\n" 30 60 4 /dev/sda "/dev/sda" /dev/sdb "/dev/sdb" /dev/sdd "/dev/sdd" /dev/sdc "/dev/sdc" 2>/tmp/devformat.$$	
+	$DIALOG $OPTS --title "Enter amount of swap space." --inputbox "Enter the size of swap partition.\nFor example by default in GB +10G\nor megabytes +10000M\nor kilobytes +10000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+10G" 2>/tmp/swapsize.$$
+	$DIALOG $OPTS --title "Enter the size of the first section." --inputbox "Enter the size of the first section.\nFor example by default in GB +30G\nor megabytes +30000M\nor kilobytes +30000000K\n(required to enter letters G or M or K and sign +)" 30 60 "+30G" 2>/tmp/sd2size.$$
+	$DIALOG $OPTS --title "Enter the size of the second section." --inputbox "Enter the size of the second section. \n For example the default empty string. \n If the string is empty then the second section \n will take the rest of the disc - recommended\n(letter G,M,K and sign + required)" 30 60 "$1" 2>/tmp/sd3size.$$
+	$DIALOG $OPTS --title "The file system of the first disk" --menu "The file system of the first disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd2.$$
+	$DIALOG $OPTS --title "The file system of the second disk" --menu "The file system of the second disk. \n For example the default ext3 (by default, it is recommended)" 30 60 4 ext3 "ext3" xfs "xfs" reiserfs "reiserfs" jfs "jfs" 2>/tmp/fssd3.$$
+	$DIALOG $OPTS --title "Selecting a partition to install" --inputbox "Enter the partition to install. \n For example 2 by default, /dev/sda2 or /dev/sdb2 \n or 3 for /dev/sda3 or /dev/sdb3." 30 60 "2" 2>/tmp/devinstall.$$
+	fi	
+
+
 
 devformat="`cat /tmp/devformat.$$`"
 devformat1="`cat /tmp/devformat.$$`1"
@@ -760,14 +698,24 @@ mkfs.$fssd2 $devsd2
 devsd3="`cat /tmp/devformat.$$`3"
 mkfs.$fssd3 $devsd3
 
+	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
+        then
         $DIALOG $OPTS --title "Ввод имени компьютера в сети" --inputbox "Введите имя компьютера. \n Например calculate по умолчанию" 30 60 "calculate" 2>/tmp/hostn.$$
         $DIALOG $OPTS --title "Ввод имени домена" --inputbox "Введите имя домена. \n Например home (по умолчанию)" 30 60 "home" 2>/tmp/domain.$$
-#````````$DIALOG $OPTS --radiolist "Выбирите желаемое разрешение экрана" 20 40 3 1024x768 "1024x768" on 800x600 "800x600" off 640x480 "640x480" off 2>/tmp/resolution.$$
-````````$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Выбирите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "Выбор разрешения экрана" --inputbox "Введите желаемое разрешение экрана. \n Например 1024x768 (по умолчанию)" 30 60 "1024x768" 2>/tmp/resolution.$$
 	$DIALOG $OPTS --title "Выбор установки загрузчика" --menu "Записать загрузчик в mbr \n yes или no \n (переход с помошью стрелок \n выбор с помошью клавиши 'ENTER')" 30 60 2 yes "ДА" no "НЕТ" 2>/tmp/mbr.$$
-        $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск.
+        $DIALOG $OPTS --yesno "Сейчас будет произведена установка системы на жесткий диск в режиме --buil.
 
-    Установить?" 15 60
+        Установить?" 15 60
+	else
+	$DIALOG $OPTS --title "Enter the name of the computer network" --inputbox "Enter the computer name. \n For example calculate the default" 30 60 "calculate" 2>/tmp/hostn.$$
+	$DIALOG $OPTS --title "Enter a domain name" --inputbox "Enter a domain name. \n For example home (default)" 30 60 "home" 2>/tmp/domain.$$
+	$DIALOG $OPTS --title "The choice of screen resolution" --inputbox "Enter the desired screen resolution. \n For example 1024x768 (default)" 30 60 "1024x768" 2>/tmp/resolution.$$
+	$DIALOG $OPTS --title "Selecting the boot loader" --menu "Record loader to mbr \n yes or no \n (transition with the aid of the arrows \n selection with the aid of key 'ENTER')" 30 60 2 yes "YES" no "NO" 2>/tmp/mbr.$$
+	$DIALOG $OPTS --yesno "Now the system will be installed on the hard disk --build.
+
+        Install?" 15 60
+        fi
         if [ $? = "0" ]
         then
 
@@ -784,9 +732,14 @@ mbr="`cat /tmp/mbr.$$`"
 ### -f option disables the questions the installer during installation
 /usr/bin/cl-install -f -d $devinst --hostname $hostn,$domain --X $resolution --mbr $mbr --build
 
-
-    $DIALOG $OPTS --msgbox "Система установлена - теперь необходима перезагрузка." 10 60
-    $DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
+	if [ LANG=ru_RU.UTF-8 = "LANG=ru_RU.UTF-8" ];
+	then
+       $DIALOG $OPTS --msgbox "Система установлена - теперь необходима перезагрузка." 10 60
+       $DIALOG $OPTS --yesno "Перегрузить компьютер?" 15 60
+	else
+	$DIALOG $OPTS --msgbox "The system is installed - now a reboot." 10 60
+       $DIALOG $OPTS --yesno "Reboot the computer?" 15 60
+	fi
        if [ $? = "0" ]
         then
         reboot
